@@ -80,38 +80,6 @@ async function run() {
       res.json(result);
     })
 
-    //middleware
-    app.patch('/update/:id', async (req, res) => {
-      const { id } = req.params
-      const bookingData = req.body
-      const booking = await bookingCollection.findOne({ _id: new ObjectId(id) }).toArray()
-      if (!booking) {
-        res.status(404).json({ message: "result is not found" })
-      }
-      await bookingCollection.updateOne({ _id: new ObjectId(id) }, {
-        $inc: { updateCount: 1 },
-        $set: {
-          lastUpdateAt: new Date(),
-        }
-      })
-      const result = await updateCollection.insertOne({
-        ...bookingData,
-        updteAt: new Date()
-      })
-      res.json(result)
-    })
-
-    app.post('/booking', verifyToken, async (req, res) => {
-      const bookingData = req.body
-      const result = await bookingCollection.insertOne(bookingData)
-      res.json(result)
-    })
-
-    app.delete('/booking/:Id', verifyToken, async (req, res) => {
-      const { Id } = req.params
-      const result = await bookingCollection.deleteOne({ _id: new ObjectId(Id) })
-      res.json(result)
-    })
 
 
     //await client.db("admin").command({ ping: 1 });

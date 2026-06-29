@@ -85,7 +85,10 @@ async function run() {
     })
 
 
-   
+    app.get('/addtutor', async (req, res) => {
+      const result = await myTutorCollection.find().toArray();
+      res.json(result);
+    })
     app.post('/addtutor', async (req, res) => {
       const addtutorData = req.body
       const result = await myTutorCollection.insertOne(addtutorData)

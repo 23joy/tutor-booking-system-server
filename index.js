@@ -55,7 +55,7 @@ async function run() {
     const db = client.db("mediqueue")
     const tutorCollection = db.collection("tutors")
     const bookingCollection=db.collection("bookings")
-    
+    const myTutorCollection = db.collection('addtutors')
     const updateCollection=db.collection("update")
 
 
@@ -86,6 +86,11 @@ async function run() {
 
 
    
+    app.post('/addtutor', async (req, res) => {
+      const addtutorData = req.body
+      const result = await myTutorCollection.insertOne(addtutorData)
+      res.json(result)
+    })
 
     app.get('/featured', async (req, res) => {
       const result = await tutorCollection.find().limit(6).toArray()

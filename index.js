@@ -55,7 +55,7 @@ async function run() {
     const db = client.db("mediqueue")
     const tutorCollection = db.collection("tutors")
     const bookingCollection=db.collection("bookings")
-    //const myTutorCollection = db.collection('addtutors')
+    const myTutorCollection = db.collection('addtutors')
     const updateCollection=db.collection("update")
 
 
@@ -66,9 +66,18 @@ async function run() {
     })
 
     app.get('/tutors', async (req, res) => {
+      // const search=req.query.search;
+      // let query={};
+      // if(search){
+      //   query.name={$regex:search,
+      //     $options:'i',};
+      // }
+
       const result = await tutorCollection.find().toArray();
+      console.log(result)
       res.json(result);
     })
+
     app.get('/tutors/:id',verifyToken, async (req, res) => {
       const { id } = req.params
       const result = await tutorCollection.findOne({ _id: new ObjectId(id) })
@@ -76,10 +85,6 @@ async function run() {
     })
 
 
-    app.get('/addtutor', async (req, res) => {
-      const result = await myTutorCollection.find().toArray();
-      res.json(result);
-    })
     app.post('/addtutor', async (req, res) => {
       const addtutorData = req.body
       const result = await myTutorCollection.insertOne(addtutorData)
@@ -101,12 +106,6 @@ async function run() {
     app.post('/bookings',verifyToken, async (req, res) => {
       const bookingData = req.body
       const result = await bookingCollection.insertOne(bookingData)
-      res.json(result)
-    })
-
-    app.delete('/bookings/:Id', verifyToken, async (req, res) => {
-      const { Id } = req.params
-      const result = await bookingCollection.deleteOne({ _id: new ObjectId(Id) })
       res.json(result)
     })
 

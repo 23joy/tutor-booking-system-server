@@ -94,6 +94,13 @@ async function run() {
       const result = await myTutorCollection.insertOne(addtutorData)
       res.json(result)
     })
+    app.patch("/addtutor/:id",async(req,res)=>{
+      const{id}=req.params
+      const updateData=req.body
+      const result=await myTutorCollection.updateOne({_id:new ObjectId(id)},
+    {$set:updateData})
+    res.json(result)
+    })
 
     app.get('/featured', async (req, res) => {
       const result = await tutorCollection.find().limit(6).toArray()
